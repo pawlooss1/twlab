@@ -6,8 +6,9 @@ import java.util.stream.Stream;
 public class Buffer {
     private String value;
     private boolean present = false;
+    public static final int STEPS = 3;
 
-    public void put(String message){
+    public synchronized void put(String message){
         while (present) {
             try {
                 wait();
@@ -17,10 +18,10 @@ public class Buffer {
         }
         value = message;
         present = true;
-        notify();
+        notifyAll();
     }
 
-    public String take() {
+    public synchronized String take() {
         while (!present) {
             try {
                 wait();
@@ -29,7 +30,7 @@ public class Buffer {
             }
         }
         present = false;
-        notify();
+        notifyAll();
         return value;
     }
 
@@ -37,6 +38,7 @@ public class Buffer {
         Buffer buffer = new Buffer();
         Stream<Producer> producerStream = IntStream.range(0, 2).mapToObj(i -> new Producer(buffer));
         Stream<Consumer> consumerStream = IntStream.range(0, 5).mapToObj(i -> new Consumer(buffer));
-        
+        consumerStream.forEach(Thread::start);
+        producerStream.forEach(Thread::start);
     }
 }

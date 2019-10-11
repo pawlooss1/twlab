@@ -8,8 +8,9 @@ public class Consumer extends Thread{
     @Override
     public void run() {
 
-        for(int i = 0;  i < Counter.STEPS;   i++) {
+        for(int i = 0;  i < Buffer.STEPS;   i++) {
             String message = buffer.take();
+            System.out.println(message);
         }
 
     }

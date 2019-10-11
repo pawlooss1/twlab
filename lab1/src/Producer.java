@@ -8,8 +8,8 @@ public class Producer extends Thread{
     @Override
     public void run() {
 
-        for(int i = 0;  i < Counter.STEPS;   i++) {
-            buffer.put("message " + i);
+        for(int i = 0;  i < Buffer.STEPS;   i++) {
+            buffer.put(String.format("message no %d from %d", i, getId()));
         }
 
     }

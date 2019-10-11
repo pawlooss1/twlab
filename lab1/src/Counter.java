@@ -1,7 +1,7 @@
 import java.util.stream.LongStream;
 
 public class Counter {
-    public static final long STEPS = 300000000;
+    public static final long STEPS = 300_000_000;
     public int value = 0;
 
     public synchronized void increment() {
