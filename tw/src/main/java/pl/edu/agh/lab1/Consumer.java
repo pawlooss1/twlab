@@ -1,3 +1,5 @@
+package pl.edu.agh.lab1;
+
 public class Consumer extends Thread{
     private Buffer buffer;
 

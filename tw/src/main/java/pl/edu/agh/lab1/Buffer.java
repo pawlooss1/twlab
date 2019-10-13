@@ -1,5 +1,5 @@
-import java.util.List;
-import java.util.stream.Collectors;
+package pl.edu.agh.lab1;
+
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 

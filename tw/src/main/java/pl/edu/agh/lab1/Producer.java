@@ -1,3 +1,5 @@
+package pl.edu.agh.lab1;
+
 public class Producer extends Thread{
     private Buffer buffer;
 

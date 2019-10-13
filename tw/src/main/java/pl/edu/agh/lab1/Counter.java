@@ -1,3 +1,5 @@
+package pl.edu.agh.lab1;
+
 import java.util.stream.LongStream;
 
 public class Counter {
