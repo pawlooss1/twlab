@@ -1,9 +1,11 @@
 package pl.edu.agh.lab1;
 
+import pl.edu.agh.util.Utils;
+
 import java.util.stream.LongStream;
 
 public class Counter {
-    public static final long STEPS = 300_000_000;
+    public static final long STEPS = 500_000_000;
     public int value = 0;
 
     public synchronized void increment() {
@@ -24,18 +26,12 @@ public class Counter {
         };
         Thread incrementorThread = new Thread(incrementor);
         Thread decrementorThread = new Thread(decrementor);
-        long startTime = System.nanoTime();
-        incrementorThread.start();
-        decrementorThread.start();
-        try {
-            incrementorThread.join();
-            decrementorThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        long endTime = System.nanoTime();
-        long estimatedTime = endTime - startTime;
-        System.out.println(String.format("It took %d.%d seconds", estimatedTime / 1000000000, estimatedTime % 1000000000));
+        Utils.measureExecutionTime(() -> {
+            incrementorThread.start();
+            decrementorThread.start();
+            Utils.joinUnchecked(incrementorThread);
+            Utils.joinUnchecked(decrementorThread);
+        });
         System.out.println(counter.value);
     }
 }
