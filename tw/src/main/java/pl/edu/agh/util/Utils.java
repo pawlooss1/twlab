@@ -20,4 +20,12 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static void waitUnchecked(Object object) {
+        try {
+            object.wait();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

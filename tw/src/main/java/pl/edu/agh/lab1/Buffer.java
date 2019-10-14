@@ -7,17 +7,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Buffer {
+    public static final int STEPS = 5;
     private String value;
     private boolean present = false;
-    public static final int STEPS = 5;
 
     public synchronized void put(String message) {
         while (present) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            Utils.waitUnchecked(this);
         }
         value = message;
         present = true;
@@ -26,11 +22,7 @@ public class Buffer {
 
     public synchronized String take() {
         while (!present) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            Utils.waitUnchecked(this);
         }
         present = false;
         notifyAll();
