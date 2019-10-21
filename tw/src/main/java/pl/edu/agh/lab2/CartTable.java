@@ -14,11 +14,19 @@ public class CartTable {
 
     public Cart takeCart() {
         semaphore.p();
-        return carts.removeFirst();
+        Cart cart = carts.removeFirst();
+        //System.out.printf("Took cart %d%n", cart.getNumber());
+        //System.out.println(getCartQueue());
+        return cart;
     }
 
     public void returnCart(Cart cart) {
-        carts.addFirst(cart);
+        carts.addLast(cart);
         semaphore.v();
+    }
+
+    private String getCartQueue() {
+        return carts.stream().map(cart -> String.valueOf(cart.getNumber()))
+                .reduce("Table:", (s1, s2) -> String.join(" ", s1, s2));
     }
 }
