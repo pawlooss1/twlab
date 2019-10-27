@@ -9,18 +9,20 @@ public class CartTable {
 
     public CartTable(int numberOfCarts) {
         IntStream.range(0, numberOfCarts).mapToObj(Cart::new).forEach(carts::add);
-        semaphore = new CountingSemaphore(numberOfCarts);
+        semaphore = new BinarySemaphore();
     }
 
     public Cart takeCart() {
         semaphore.p();
-        Cart cart = carts.removeFirst();
         //System.out.printf("Took cart %d%n", cart.getNumber());
         //System.out.println(getCartQueue());
+        Cart cart = carts.removeFirst();
+        semaphore.v();
         return cart;
     }
 
     public void returnCart(Cart cart) {
+        semaphore.p();
         carts.addLast(cart);
         semaphore.v();
     }

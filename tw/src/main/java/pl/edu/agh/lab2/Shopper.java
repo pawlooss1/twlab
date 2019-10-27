@@ -19,16 +19,16 @@ public class Shopper extends Thread {
     private void goShopping() {
         cart = shop.takeCart();
         int cartNumber = cart.getNumber();
-        //System.out.printf("Shopper %d took cart %d%n", getId(), cartNumber);
+        System.out.printf("Shopper %d took cart %d%n", getId(), cartNumber);
         try {
             sleep(RandomUtils.nextInt(1, 100));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         chooseItem();
-        //System.out.printf("Shopper %d took item %s%n", getId(), cart.getContent());
+        System.out.printf("Shopper %d took item %s%n", getId(), cart.getContent());
         shop.returnCart(cart);
-        //System.out.printf("Shopper %d done with the shopping. Returned cart %d%n", getId(), cartNumber);
+        System.out.printf("Shopper %d done with the shopping. Returned cart %d%n", getId(), cartNumber);
 
     }
 

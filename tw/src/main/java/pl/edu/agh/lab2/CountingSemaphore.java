@@ -11,10 +11,10 @@ public class CountingSemaphore implements Semaphore{
 
     @Override
     public synchronized void p() {
-        value--;
-        while (value < 0) {
+        while (value < 1) {
             Utils.waitUnchecked(this);
         }
+        value--;
     }
 
     @Override

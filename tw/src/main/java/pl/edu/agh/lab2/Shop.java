@@ -8,30 +8,25 @@ import java.util.stream.IntStream;
 
 public class Shop {
     private CartTable cartTable;
-    private Semaphore takeCartSemaphore;
-    private Semaphore returnCartSemaphore;
+    private Semaphore cartTableSemaphore;
 
     public Shop(int numberOfCarts) {
         cartTable = new CartTable(numberOfCarts);
-        takeCartSemaphore = new BinarySemaphore();
-        returnCartSemaphore = new BinarySemaphore();
+        cartTableSemaphore = new CountingSemaphore(numberOfCarts);
     }
 
     public Cart takeCart() {
-        takeCartSemaphore.p();
-        Cart cart = cartTable.takeCart();
-        takeCartSemaphore.v();
-        return cart;
+        cartTableSemaphore.p();
+        return cartTable.takeCart();
     }
 
     public void returnCart(Cart cart) {
-        returnCartSemaphore.p();
         cartTable.returnCart(cart);
-        returnCartSemaphore.v();
+        cartTableSemaphore.v();
     }
 
     public static void main(String[] args) {
-        Shop shop1 = new Shop(10);
+        Shop shop1 = new Shop(4);
         System.out.println("Concurrent:");
         Utils.measureExecutionTime(() -> {
             List<Shopper> shoppers = IntStream.range(0, 200)
@@ -39,11 +34,11 @@ public class Shop {
             shoppers.forEach(Thread::start);
             shoppers.forEach(Utils::joinUnchecked);
         });
-        System.out.println("\n\n\n\n");
+        /*System.out.println("\n\n\n\n");
         Shop shop2 = new Shop(10);
         System.out.println("Non-concurrent:");
         Utils.measureExecutionTime(() -> {
             IntStream.range(0, 200).mapToObj(i -> new Shopper(shop2)).forEach(Shopper::run);
-        });
+        });*/
     }
 }

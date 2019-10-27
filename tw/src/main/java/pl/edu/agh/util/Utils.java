@@ -28,4 +28,8 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static void printWithTimestamp(String message) {
+        //todo implement
+    }
 }
