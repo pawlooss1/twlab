@@ -1,5 +1,8 @@
 package pl.edu.agh.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Utils {
 
     private static final long NANOSECONDS_IN_SECOND = 1_000_000_000;
@@ -29,7 +32,16 @@ public class Utils {
         }
     }
 
-    public static void printWithTimestamp(String message) {
-        //todo implement
+    public static void sleepUnchecked(Thread thread, int timeInMillis) {
+        try {
+            thread.sleep(timeInMillis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String appendTimestampPrefix(String message) {
+        String timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().getTime());
+        return String.format("[%s] %s", timeStamp, message);
     }
 }
