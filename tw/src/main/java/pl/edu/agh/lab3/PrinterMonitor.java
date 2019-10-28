@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 
 public class PrinterMonitor {
     private final Lock lock = new ReentrantLock();
-    private final Condition notFull = lock.newCondition();
     private final Condition notAvailable = lock.newCondition();
 
     private final int printersNo;

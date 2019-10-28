@@ -2,7 +2,6 @@ package pl.edu.agh.lab3;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import pl.edu.agh.util.Utils;
 
 import java.util.stream.IntStream;
 
@@ -21,13 +20,12 @@ public class PrinterUser extends Thread {
     @Override
     public void run() {
         while (true) {
-            taskToPrint = RandomStringUtils.randomAlphabetic(6) + this.getId();
+            taskToPrint = String.format("%s_%d", RandomStringUtils.randomAlphabetic(6), this.getId());
             try {
                 sleep(0, RandomUtils.nextInt(0, 1));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            //Utils.waitUnchecked(RandomUtils.nextInt(0, 5));
             int printerNumber = monitor.takePrinter();
             print(printerNumber);
             monitor.releasePrinter(printerNumber);
