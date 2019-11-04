@@ -14,8 +14,9 @@ import java.util.concurrent.Future;
 
 public class Mandelbrot extends JFrame {
 
-    private final int MAX_ITER = 10000;
-    private final double ZOOM = 150;
+    private final static int PIXELS_NUMBER = 480000;
+    private final static int MAX_ITER = 10000;
+    private final static double ZOOM = 150;
     private BufferedImage I;
     private ExecutorService executor;
 
@@ -43,10 +44,27 @@ public class Mandelbrot extends JFrame {
                 throw new RuntimeException(e);
             }
         }
-        setVisible(true);
     }
 
-    public boolean drawMandelbrot(int lineFrom, int lineTo) {
+    public void scheduleDrawingTaskPerPixel() {
+        List<Future<Boolean>> isDone = new ArrayList<>(PIXELS_NUMBER);
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                int finalY = y;
+                int finalX = x;
+                isDone.add(executor.submit(() -> setPixel(finalX, finalY)));
+            }
+        }
+        for (Future<Boolean> done : isDone) {
+            try {
+                done.get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private boolean drawMandelbrot(int lineFrom, int lineTo) {
         for (int y = lineFrom; y < lineTo; y++) {
             for (int x = 0; x < getWidth(); x++) {
                 setPixel(x, y);
@@ -55,7 +73,7 @@ public class Mandelbrot extends JFrame {
         return true;
     }
 
-    private void setPixel(int x, int y) {
+    private boolean setPixel(int x, int y) {
         double zx = 0;
         double zy = 0;
         double cX = (x - 400) / ZOOM;
@@ -69,6 +87,7 @@ public class Mandelbrot extends JFrame {
             iter--;
         }
         I.setRGB(x, y, iter | (iter << 8));
+        return true;
     }
 
     @Override
@@ -77,6 +96,8 @@ public class Mandelbrot extends JFrame {
     }
 
     public static void main(String[] args) {
-        Utils.measureExecutionTime(() -> new Mandelbrot(8).scheduleDrawing(799));
+        Mandelbrot m = new Mandelbrot(8);
+        Utils.measureExecutionTime(() -> m.scheduleDrawing(80));
+        m.setVisible(true);
     }
 }
