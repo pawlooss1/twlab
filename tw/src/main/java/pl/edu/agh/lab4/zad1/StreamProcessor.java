@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class StreamProcessor {
+    private static final int FIELDS_NUMBER = 20;
+    private static final int PROCESSORS_NUMBER = 40;
     private int size;
     private int processorsNo;
     private StreamBuffer buffer;
@@ -18,7 +20,7 @@ public class StreamProcessor {
     private Runnable createProcessor(int number) {
         return () -> {
             for (int i = 0; i < size; i++) {
-                String newValue = buffer.take(i) + number;
+                String newValue = String.format("%s, %d", buffer.take(i, number), number);
                 buffer.put(newValue, i, number);
             }
         };
@@ -28,7 +30,7 @@ public class StreamProcessor {
         Runnable producer = new Producer(buffer);
         List<Runnable> processors = IntStream.range(1, processorsNo + 1)
                 .mapToObj(this::createProcessor).collect(Collectors.toList());
-        Runnable consumer = new Consumer(buffer);
+        Runnable consumer = new Consumer(buffer, processorsNo + 1);
         new Thread(producer).start();
         processors.stream().map(Thread::new).forEach(Thread::start);
         new Thread(consumer).start();
@@ -36,6 +38,6 @@ public class StreamProcessor {
 
 
     public static void main(String[] args) {
-        new StreamProcessor(10, 4, new StreamBuffer(10)).run();
+        new StreamProcessor(FIELDS_NUMBER, PROCESSORS_NUMBER, new StreamBuffer(FIELDS_NUMBER)).run();
     }
 }

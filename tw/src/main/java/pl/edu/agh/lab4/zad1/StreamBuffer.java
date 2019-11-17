@@ -3,7 +3,6 @@ package pl.edu.agh.lab4.zad1;
 import io.vavr.Tuple2;
 import pl.edu.agh.lab1.Buffer;
 import pl.edu.agh.lab3.BoundedBuffer;
-import pl.edu.agh.util.Utils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,16 +36,26 @@ public class StreamBuffer {
                 canProcess.await();
             }
             array.get(cellNumber)._2.incrementAndGet();
+            array.get(cellNumber)._1.put(value);
             canProcess.signalAll();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             lock.unlock();
         }
-        array.get(cellNumber)._1.put(value);
     }
 
-    public String take(int cellNumber) {
-        return array.get(cellNumber)._1.take();
+    public String take(int cellNumber, int processorNo) {
+        lock.lock();
+        try {
+            while (array.get(cellNumber)._2.intValue() < processorNo) {
+                canProcess.await();
+            }
+            return array.get(cellNumber)._1.take();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
     }
 }
