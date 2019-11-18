@@ -2,6 +2,7 @@ package pl.edu.agh.lab4.zad2;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,10 +20,13 @@ public class RandomSizeProducer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        for (int i = 0; true; i++) {
             int size = RandomUtils.nextInt(1, maxSize + 1);
             List<Integer> product = IntStream.range(0, size).boxed().collect(Collectors.toList());
+            long startTime = System.nanoTime();
             buffer.put(product);
+            long endTime = System.nanoTime();
+            Statistician.getInstance().addPutTime(size, endTime - startTime);
         }
     }
 }

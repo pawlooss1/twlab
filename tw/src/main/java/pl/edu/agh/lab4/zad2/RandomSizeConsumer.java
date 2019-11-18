@@ -18,10 +18,13 @@ public class RandomSizeConsumer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        for (int i = 0; true; i++) {
             int size = RandomUtils.nextInt(1, maxSize + 1);
+            long startTime = System.nanoTime();
             Collection<Integer> product = buffer.take(size);
-            System.out.println(Utils.collectionToString(product, String.format("%d: ", consumerNo), Object::toString));
+            long endTime = System.nanoTime();
+            Statistician.getInstance().addTakeTime(size, endTime - startTime);
+            //System.out.println(Utils.collectionToString(product, String.format("%d: ", consumerNo), Object::toString));
         }
     }
 }
