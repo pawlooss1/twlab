@@ -2,6 +2,9 @@ package pl.edu.agh.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 public class Utils {
 
@@ -43,5 +46,9 @@ public class Utils {
     public static String appendTimestampPrefix(String message) {
         String timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().getTime());
         return String.format("[%s] %s", timeStamp, message);
+    }
+
+    public static <E> String collectionToString(Collection<E> list, String prefix, Function<E, String> mapper) {
+        return list.stream().map(mapper).reduce(prefix, (s1, s2) -> String.join(" ", s1, s2));
     }
 }
