@@ -97,7 +97,7 @@ public class Mandelbrot extends JFrame {
 
     public static void main(String[] args) {
         Mandelbrot m = new Mandelbrot(8);
-        Utils.measureExecutionTime(() -> m.scheduleDrawing(80));
+        Utils.printExecutionTime(() -> m.scheduleDrawing(80));
         m.setVisible(true);
     }
 }

@@ -1,6 +1,7 @@
 package pl.edu.agh.lab4.zad2;
 
 import io.vavr.Tuple2;
+import pl.edu.agh.util.Utils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,18 +33,13 @@ public class Statistician {
 
     public List<Tuple2<Integer, Double>> putTimeMean() {
         return putTime.entrySet().stream()
-                .map(entry -> new Tuple2<>(entry.getKey(), listMean(entry.getValue())))
+                .map(entry -> new Tuple2<>(entry.getKey(), Utils.listMean(entry.getValue())))
                 .collect(Collectors.toList());
     }
 
     public List<Tuple2<Integer, Double>> takeTimeMean() {
         return takeTime.entrySet().stream()
-                .map(entry -> new Tuple2<>(entry.getKey(), listMean(entry.getValue())))
+                .map(entry -> new Tuple2<>(entry.getKey(), Utils.listMean(entry.getValue())))
                 .collect(Collectors.toList());
-    }
-
-    private double listMean(List<Double> list) {
-        Double sum = list.stream().reduce((double) 0, Double::sum);
-        return sum / list.size();
     }
 }

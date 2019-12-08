@@ -35,7 +35,7 @@ public class SimpleBuffer implements Buffer<String> {
                 .collect(Collectors.toList());
         List<Consumer> consumers = IntStream.range(0, 2).mapToObj(i -> new Consumer(buffer))
                 .collect(Collectors.toList());
-        Utils.measureExecutionTime(() -> {
+        Utils.printExecutionTime(() -> {
             consumers.forEach(Thread::start);
             producers.forEach(Thread::start);
             consumers.forEach(Utils::joinUnchecked);

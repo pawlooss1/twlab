@@ -22,7 +22,7 @@ public class Counter {
         Runnable decrementor = () -> LongStream.range(0, STEPS).forEach(i -> counter.decrement());
         Thread incrementorThread = new Thread(incrementor);
         Thread decrementorThread = new Thread(decrementor);
-        Utils.measureExecutionTime(() -> {
+        Utils.printExecutionTime(() -> {
             incrementorThread.start();
             decrementorThread.start();
             Utils.joinUnchecked(incrementorThread);

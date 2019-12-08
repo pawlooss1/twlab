@@ -3,7 +3,6 @@ package pl.edu.agh.lab3;
 import pl.edu.agh.lab1.Buffer;
 import pl.edu.agh.lab1.Consumer;
 import pl.edu.agh.lab1.Producer;
-import pl.edu.agh.lab1.SimpleBuffer;
 import pl.edu.agh.util.Utils;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class BoundedBuffer implements Buffer<String> {
                 .collect(Collectors.toList());
         List<Consumer> consumers = IntStream.range(0, 2).mapToObj(i -> new Consumer(buffer))
                 .collect(Collectors.toList());
-        Utils.measureExecutionTime(() -> {
+        Utils.printExecutionTime(() -> {
             consumers.forEach(Thread::start);
             producers.forEach(Thread::start);
             consumers.forEach(Utils::joinUnchecked);

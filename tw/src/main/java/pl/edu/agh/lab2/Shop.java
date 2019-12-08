@@ -28,7 +28,7 @@ public class Shop {
     public static void main(String[] args) {
         Shop shop1 = new Shop(4);
         System.out.println("Concurrent:");
-        Utils.measureExecutionTime(() -> {
+        Utils.printExecutionTime(() -> {
             List<Shopper> shoppers = IntStream.range(0, 200)
                     .mapToObj(i -> new Shopper(shop1)).collect(Collectors.toList());
             shoppers.forEach(Thread::start);

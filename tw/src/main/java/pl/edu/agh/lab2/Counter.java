@@ -31,7 +31,7 @@ public class Counter {
         });
         Thread incrementorThread = new Thread(incrementor);
         Thread decrementorThread = new Thread(decrementor);
-        Utils.measureExecutionTime(() -> {
+        Utils.printExecutionTime(() -> {
             incrementorThread.start();
             decrementorThread.start();
             Utils.joinUnchecked(incrementorThread);

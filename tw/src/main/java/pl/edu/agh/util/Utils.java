@@ -1,22 +1,31 @@
 package pl.edu.agh.util;
 
+import io.vavr.Tuple2;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Utils {
 
     private static final long NANOSECONDS_IN_SECOND = 1_000_000_000;
 
-    public static void measureExecutionTime(Executable function) {
+    public static void printExecutionTime(Executable function) {
+        long estimatedTime = measureExecutionTime(function);
+        System.out.println(String.format("It took %d.%d seconds", estimatedTime / NANOSECONDS_IN_SECOND,
+                estimatedTime % NANOSECONDS_IN_SECOND));
+    }
+
+    public static long measureExecutionTime(Executable function) {
         long startTime = System.nanoTime();
         function.execute();
         long endTime = System.nanoTime();
-        long estimatedTime = endTime - startTime;
-        System.out.println(String.format("It took %d.%d seconds", estimatedTime / NANOSECONDS_IN_SECOND,
-                estimatedTime % NANOSECONDS_IN_SECOND));
+        return endTime - startTime;
     }
 
     public static void joinUnchecked(Thread thread) {
@@ -50,5 +59,23 @@ public class Utils {
 
     public static <E> String collectionToString(Collection<E> list, String prefix, Function<E, String> mapper) {
         return list.stream().map(mapper).reduce(prefix, (s1, s2) -> String.join(" ", s1, s2));
+    }
+
+    public static <E> List<E> createObjects(int howMany, Supplier<E> supplier) {
+        return IntStream.range(0, howMany).mapToObj(i -> supplier.get()).collect(Collectors.toList());
+    }
+
+    public static double listMean(List<Double> list) {
+        if (list.size() <= 0) {
+            throw new IllegalArgumentException("List cannot be empty");
+        }
+        Double sum = list.stream().reduce(0.0, Double::sum);
+        return sum / list.size();
+    }
+
+    public static void printMeasurements(List<Tuple2<Integer, Double>> measurements) {
+        for (Tuple2<Integer, Double> measurement : measurements) {
+            System.out.println(String.format("%f", measurement._2));
+        }
     }
 }

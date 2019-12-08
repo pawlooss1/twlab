@@ -1,8 +1,7 @@
 package pl.edu.agh.philosophers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import pl.edu.agh.util.Utils;
+
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -16,10 +15,11 @@ public class HungerFork implements Fork {
     private List<Condition> philosophers;
 
     public HungerFork() {
-        free = IntStream.range(0, 5).map(i -> 2).boxed().collect(Collectors.toList());
-        philosophers = IntStream.range(0, 5).mapToObj(i -> lock.newCondition()).collect(Collectors.toList());
+        free = Utils.createObjects(5, () -> 2);
+        philosophers = Utils.createObjects(5, lock::newCondition);
     }
 
+    @Override
     public void take(int i) {
         try {
             lock.lock();
@@ -35,6 +35,7 @@ public class HungerFork implements Fork {
         }
     }
 
+    @Override
     public void putBack(int i) {
         try {
             lock.lock();
