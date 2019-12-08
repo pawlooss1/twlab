@@ -1,6 +1,5 @@
 package pl.edu.agh.philosophers;
 
-import org.apache.commons.lang3.RandomUtils;
 import pl.edu.agh.util.Utils;
 
 import java.util.List;
@@ -17,17 +16,12 @@ public class Philosopher extends Thread {
     }
 
     public void think() {
-//        System.out.println(String.format("Philosopher %d started thinking", number));
-//        Utils.sleepUnchecked(this, RandomUtils.nextInt(100, 200));
-//        System.out.println(String.format("Philosopher %d ended thinking", number));
+
     }
 
     public void eat() {
         long waitTime = Utils.measureExecutionTime(() -> fork.take(number));
         Statistician.getInstance().addWaitTime(number, waitTime);
-//        System.out.println(String.format("Philosopher %d started eating", number));
-//        Utils.sleepUnchecked(this, RandomUtils.nextInt(100, 200));
-//        System.out.println(String.format("Philosopher %d ended eating", number));
         fork.putBack(number);
     }
 

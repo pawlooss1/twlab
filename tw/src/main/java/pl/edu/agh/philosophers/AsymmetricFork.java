@@ -40,10 +40,10 @@ public class AsymmetricFork implements Fork {
     public void putBack(int i) {
         try {
             lock.lock();
-            occupied.set(firstFork(i), false);
-            forks.get(firstFork(i)).signal();
             occupied.set(secondFork(i), false);
             forks.get(secondFork(i)).signal();
+            occupied.set(firstFork(i), false);
+            forks.get(firstFork(i)).signal();
         } finally {
             lock.unlock();
         }
