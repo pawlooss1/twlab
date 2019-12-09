@@ -27,14 +27,14 @@ public class Philosopher extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1000; i++) {
             think();
             eat();
         }
     }
 
     public static void main(String[] args) {
-        Fork fork = new AsymmetricFork();
+        Fork fork = new WaiterFork();
         List<Thread> philosophers = IntStream.range(0, 5)
                 .mapToObj(i -> new Philosopher(i, fork)).collect(Collectors.toList());
         philosophers.forEach(Thread::start);

@@ -26,13 +26,13 @@ class Philosopher(threading.Thread):
         self.fork.put_back(self.number)
 
     def run(self):
-        for _ in range(100000):
+        for _ in range(1000):
             self.think()
             self.eat()
 
 
 if __name__ == '__main__':
-    fork = WaiterFork()
+    fork = AsymmetricFork()
     philosophers = list(map(lambda i: Philosopher(i, fork), range(5)))
     for philosopher in philosophers:
         philosopher.start()
