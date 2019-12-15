@@ -2,6 +2,10 @@ package pl.edu.agh.util;
 
 import io.vavr.Tuple2;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -13,12 +17,11 @@ import java.util.stream.IntStream;
 
 public class Utils {
 
-    private static final long NANOSECONDS_IN_SECOND = 1_000_000_000;
+    private static final double NANOSECONDS_IN_SECOND = 1_000_000_000;
 
     public static void printExecutionTime(Executable function) {
         long estimatedTime = measureExecutionTime(function);
-        System.out.println(String.format("It took %d.%d seconds", estimatedTime / NANOSECONDS_IN_SECOND,
-                estimatedTime % NANOSECONDS_IN_SECOND));
+        System.out.println(String.format("It took %f seconds", estimatedTime / NANOSECONDS_IN_SECOND));
     }
 
     public static long measureExecutionTime(Executable function) {
@@ -76,6 +79,16 @@ public class Utils {
     public static void printMeasurements(List<Tuple2<Integer, Double>> measurements) {
         for (Tuple2<Integer, Double> measurement : measurements) {
             System.out.println(String.format("%f", measurement._2));
+        }
+    }
+
+    public static List<String> loadText(String filePath) {
+        try {
+            return Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)
+                    .filter(s -> !s.equals(""))
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
