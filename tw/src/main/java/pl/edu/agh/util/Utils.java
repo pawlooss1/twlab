@@ -47,6 +47,14 @@ public class Utils {
         }
     }
 
+    public static void sleepUnchecked(int timeInMillis) {
+        try {
+            Thread.sleep(timeInMillis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void sleepUnchecked(Thread thread, int timeInMillis) {
         try {
             thread.sleep(timeInMillis);
