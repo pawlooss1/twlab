@@ -5,26 +5,28 @@ import pl.edu.agh.util.Utils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class WordsCounter {
     private String filePath;
-    private String content;
+    private List<String> content;
 
     public WordsCounter(String filePath) {
         this.filePath = filePath;
-        try
-        {
-            content = new String ( Files.readAllBytes( Paths.get(filePath) ) );
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        this.content = Utils.loadText(filePath);
+//        try
+//        {
+//            content = new String ( Files.readAllBytes( Paths.get(filePath) ) );
+//        }
+//        catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
         //this.content = Utils.loadText(filePath);
     }
 
     public int count() {
-        return countWords(content);
+        return content.stream().mapToInt(this::countWords).sum();//countWords(content);
         //return Utils.loadText(filePath).stream().mapToInt(this::countWords).sum();
     }
 
@@ -45,7 +47,7 @@ public class WordsCounter {
     }
 
     public int countParallel() {
-        return Utils.loadText(filePath).parallelStream().mapToInt(this::countWords).sum();
+        return content.parallelStream().mapToInt(this::countWords).sum();
     }
 
 //    private List<String> splitContent(int pieces) {
@@ -65,11 +67,11 @@ public class WordsCounter {
 //    }
 
     public static void main(String[] args) {
-        WordsCounter wordsCounter = new WordsCounter("/home/pawel/Documents/thousand");
+        WordsCounter wordsCounter = new WordsCounter("/home/pawel/Documents/large");
         System.out.println(wordsCounter.count());
 //        System.out.println(wordsCounter.countParallel());
         Utils.printExecutionTime(wordsCounter::count);
-//        Utils.printExecutionTime(wordsCounter::countParallel);
+        Utils.printExecutionTime(wordsCounter::countParallel);
 //        Spliterators
     }
 }

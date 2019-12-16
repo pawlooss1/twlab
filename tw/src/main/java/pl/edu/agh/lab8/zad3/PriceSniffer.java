@@ -39,6 +39,6 @@ public class PriceSniffer {
         PriceSniffer sniffer = new PriceSniffer();
         Utils.printExecutionTime(sniffer::sniffAsynchronously);
         sniffer.tearDown();
-//        Utils.printExecutionTime(sniffer::sniffSequentially);
+        Utils.printExecutionTime(sniffer::sniffSequentially);
     }
 }

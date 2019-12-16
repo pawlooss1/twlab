@@ -7,9 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -91,10 +89,16 @@ public class Utils {
     }
 
     public static List<String> loadText(String filePath) {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, "");
+        map.put(1, "");
+        map.put(2, "");
+        map.put(3, "");
         try {
-            return Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)
+            Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)
                     .filter(s -> !s.equals(""))
-                    .collect(Collectors.toList());
+                    .forEach(s -> map.put(s.length() % 4, map.get(s.length() % 4) + " " + s));
+            return new ArrayList<>(map.values());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
